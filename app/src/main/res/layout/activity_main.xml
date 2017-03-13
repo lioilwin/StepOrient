@@ -4,6 +4,7 @@
     android:layout_height="match_parent">
 
     <ImageView
+        android:id="@+id/image_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:src="@mipmap/ic_launcher" />
@@ -28,5 +29,12 @@
         android:id="@+id/orient_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/step_text"/>
+        android:layout_below="@id/step_text" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/orient_text"
+        android:onClick="btnClick"
+        android:text="添加背景图" />
 </RelativeLayout>

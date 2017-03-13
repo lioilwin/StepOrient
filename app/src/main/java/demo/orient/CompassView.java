@@ -34,7 +34,7 @@ public class CompassView extends View {
         // 初始化画笔
         paint = new Paint();
         paint.setAntiAlias(true);
-        paint.setColor(Color.BLACK);
+        paint.setColor(Color.BLUE);
         paint.setStyle(Paint.Style.FILL);
 
         // 初始化绘制路径

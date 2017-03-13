@@ -12,7 +12,7 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 public class StepSurfaceView extends SurfaceView {
-    private final Paint p;
+    private final Paint paint;
     private Bitmap bitmap;
     private SurfaceHolder mHolder;
     private Canvas canLock;
@@ -38,8 +38,8 @@ public class StepSurfaceView extends SurfaceView {
         setZOrderOnTop(true);
         mHolder.setFormat(PixelFormat.TRANSLUCENT);
 
-        p = new Paint(); // 创建画笔对象
-        p.setColor(Color.BLACK); // 设置画笔颜色
+        paint = new Paint(); // 创建画笔对象
+        paint.setColor(Color.BLUE); // 设置画笔颜色
     }
 
     /**
@@ -75,7 +75,7 @@ public class StepSurfaceView extends SurfaceView {
             canTmp = new Canvas();
             canTmp.setBitmap(bitmap);
         }
-        canTmp.drawCircle(x, y, r, p); // 通过canTmp在bitamp上画点
+        canTmp.drawCircle(x, y, r, paint); // 通过canTmp在bitamp上画点
 
         canLock.drawBitmap(bitmap, 0, 0, null); // 将bitamp绘到canLock
         mHolder.unlockCanvasAndPost(canLock); // 解锁，把画布显示在屏幕上
