@@ -9,10 +9,10 @@ import android.hardware.SensorManager;
  */
 public abstract class StepSensorBase implements SensorEventListener {
     private Context context;
-    public StepCallBack stepCallBack;
-    public SensorManager sensorManager;
-    public static int CURRENT_SETP = 0;
-    public boolean isAvailable = false;
+    protected StepCallBack stepCallBack;
+    protected SensorManager sensorManager;
+    protected static int CURRENT_SETP = 0;
+    protected boolean isAvailable = false;
 
     public StepSensorBase(Context context, StepCallBack stepCallBack) {
         this.context = context;

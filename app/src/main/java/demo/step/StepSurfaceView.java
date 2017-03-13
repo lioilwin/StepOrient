@@ -53,30 +53,31 @@ public class StepSurfaceView extends SurfaceView {
         return true;
     }
 
+    /**
+     * 自动增加点
+     */
     public void autoAddPoint(float x, float y) {
-        addPoint(X = x + X, Y = y + Y);
+        X += x;
+        Y += y;
+        addPoint(X, Y);
     }
 
     /**
-     * 在画布canLock增加点
+     * 在canLock增加点
      */
     private void addPoint(float x, float y) {
-        // 加锁，获取canLock
-        canLock = mHolder.lockCanvas();
+        canLock = mHolder.lockCanvas(); // 加锁，获取canLock
 
-        // 保存上次绘图到bitamp
+        // 保存绘图到bitamp
         if (flag == true) {
             flag = false;
             bitmap = Bitmap.createBitmap(canLock.getWidth(), canLock.getHeight(), Bitmap.Config.ARGB_8888);
             canTmp = new Canvas();
             canTmp.setBitmap(bitmap);
         }
-        // 通过canTmp在bitamp上画点
-        canTmp.drawCircle(x, y, r, p); // 画一个圆
+        canTmp.drawCircle(x, y, r, p); // 通过canTmp在bitamp上画点
 
-        // 将bitamp绘到canLock
-        canLock.drawBitmap(bitmap, 0, 0, null);
-        // 解锁，把画布显示在屏幕上
-        mHolder.unlockCanvasAndPost(canLock);
+        canLock.drawBitmap(bitmap, 0, 0, null); // 将bitamp绘到canLock
+        mHolder.unlockCanvasAndPost(canLock); // 解锁，把画布显示在屏幕上
     }
 }

@@ -2,6 +2,7 @@ package demo;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -15,29 +16,44 @@ import demo.step.StepSensorBase;
 import demo.step.StepSurfaceView;
 import demo.util.SensorUtil;
 
+import static android.R.attr.x;
+
 public class MainActivity extends AppCompatActivity implements StepCallBack, OrientCallBack {
     private final String TAG = "MainActivity";
     private TextView stepText;
     private TextView orientText;
     private StepSurfaceView stepSurfaceView;
     private CompassView compassView;
+    private float orient;
+    private int stepLen = 50; // 步长
 
     private StepSensorBase stepSensor; // 计步传感器
     private OrientSensor orientSensor; // 方向传感器
+    private float lastOrient;
 
     @Override
     public void Step(int stepNum) {
         //  计步回调
         stepText.setText("步数:" + stepNum);
-        stepSurfaceView.autoAddPoint(0, 30);
-    }
 
+//        if (Math.abs(lastOrient - orient) < 10) {
+//            orient = lastOrient;
+//        } else {
+//            lastOrient = orient;
+//        }
+
+        // 步长和方向角度转为圆点坐标
+        float x = (float) (stepLen * Math.sin(Math.toRadians(orient)));
+        float y = (float) (stepLen * Math.cos(Math.toRadians(orient)));
+        stepSurfaceView.autoAddPoint(x, -y);
+    }
 
     @Override
     public void Orient(float orient) {
         // 方向回调
+        this.orient = orient;
         orientText.setText("方向:" + (int) orient);
-        compassView.setOrient(orient);
+        compassView.setOrient(orient); // 指针转动
     }
 
     @Override
