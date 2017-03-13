@@ -5,7 +5,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
 /**
- * 计步模式分为加速度传感器、计步传感器
+ * 计步传感器抽象类，子类分为加速度传感器、或计步传感器
  */
 public abstract class StepSensorBase implements SensorEventListener {
     private Context context;
