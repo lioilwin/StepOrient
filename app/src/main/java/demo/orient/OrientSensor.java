@@ -50,7 +50,7 @@ public class OrientSensor implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-        orientCallBack.Orient(event.values[0]);
+        orientCallBack.Orient((int) event.values[0]);
     }
 
     @Override

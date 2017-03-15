@@ -67,6 +67,7 @@ public class StepSurfaceView extends SurfaceView {
      */
     private void addPoint(float x, float y) {
         canLock = mHolder.lockCanvas(); // 加锁，获取canLock
+        if (canLock == null) return;
 
         // 保存绘图到bitamp
         if (flag == true) {

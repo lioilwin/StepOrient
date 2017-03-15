@@ -13,9 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.util.Stack;
 
 import demo.orient.CompassView;
 import demo.orient.OrientCallBack;
@@ -27,52 +25,51 @@ import demo.step.StepSensorBase;
 import demo.step.StepSurfaceView;
 import demo.util.SensorUtil;
 
-import static java.lang.System.in;
-
 public class MainActivity extends AppCompatActivity implements StepCallBack, OrientCallBack {
     public static final int REQUEST_IMG = 1;
     private final String TAG = "MainActivity";
+
     private TextView stepText;
     private TextView orientText;
     private StepSurfaceView stepSurfaceView;
     private CompassView compassView;
-    private float orient;
-    private int stepLen = 50; // 步长
+    private ImageView imageView;
 
+    private int stepLen = 50; // 步长
     private StepSensorBase stepSensor; // 计步传感器
     private OrientSensor orientSensor; // 方向传感器
-    private float lastOrient;
-    private ImageView imageView;
+
+    private int orient = 0;
 
     @Override
     public void Step(int stepNum) {
         //  计步回调
-        stepText.setText("步数:" + stepNum);
+//        stepText.setText("步数:" + stepCount++);
 
-//        if (Math.abs(lastOrient - orient) < 10) {
-//            orient = lastOrient;
-//        } else {
-//            lastOrient = orient;
-//        }
+        // 获取手机转动结束后的方向
+        int correctOrient = SensorUtil.getInstance().getCorrectOrient(orient);
+        stepText.append(correctOrient + ", ");
 
         // 步长和方向角度转为圆点坐标
-        float x = (float) (stepLen * Math.sin(Math.toRadians(orient)));
-        float y = (float) (stepLen * Math.cos(Math.toRadians(orient)));
+        float x = (float) (stepLen * Math.sin(Math.toRadians(correctOrient)));
+        float y = (float) (stepLen * Math.cos(Math.toRadians(correctOrient)));
         stepSurfaceView.autoAddPoint(x, -y);
     }
 
     @Override
-    public void Orient(float orient) {
+    public void Orient(int orient) {
         // 方向回调
+        compassView.setOrient(-orient); // 指针转动
+        orientText.setText("方向:" + orient);
         this.orient = orient;
-        orientText.setText("方向:" + (int) orient);
-        compassView.setOrient(orient); // 指针转动
+//        correctOrient = SensorUtil.getInstance().getCorrectOrient(orient);
     }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SensorUtil.printAll(this); // 打印所有可用传感器
+        SensorUtil.getInstance().printAll(this); // 打印所有可用传感器
 
         setContentView(R.layout.activity_main);
         stepText = (TextView) findViewById(R.id.step_text);
@@ -84,11 +81,9 @@ public class MainActivity extends AppCompatActivity implements StepCallBack, Ori
         // 开启计步监听
         stepSensor = new StepSensorPedometer(this, this);
         if (!stepSensor.registerStep()) {
-            stepSensor = new StepSensorAcceleration(this, this);
-            if (!stepSensor.registerStep()) {
-                Toast.makeText(this, "加速度传感器不可用！", Toast.LENGTH_SHORT).show();
-            }
+            Toast.makeText(this, "加速度传感器不可用！", Toast.LENGTH_SHORT).show();
         }
+
 
         // 开启方向监听
         orientSensor = new OrientSensor(this, this);
@@ -107,8 +102,7 @@ public class MainActivity extends AppCompatActivity implements StepCallBack, Ori
 
     public void btnClick(View view) {
         // 添加背景图
-        startActivityForResult(new Intent(Intent.ACTION_PICK).setType("image/*"),
-                REQUEST_IMG);
+        startActivityForResult(new Intent(Intent.ACTION_PICK).setType("image/*"), REQUEST_IMG);
     }
 
     @Override
