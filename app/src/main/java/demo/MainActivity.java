@@ -34,17 +34,17 @@ public class MainActivity extends AppCompatActivity implements StepSensorBase.St
     private StepSensorBase stepSensor; // 计步传感器
     private OrientSensor orientSensor; // 方向传感器
 
-    private int correctOrient;
+    private int endOrient;
 
     @Override
     public void Step(int stepNum) {
         //  计步回调
 //        stepText.setText("步数:" + stepCount++);
-        stepText.append(correctOrient + ", ");
+        stepText.append(endOrient + ", ");
 
         // 步长和方向角度转为圆点坐标
-        float x = (float) (stepLen * Math.sin(Math.toRadians(correctOrient)));
-        float y = (float) (stepLen * Math.cos(Math.toRadians(correctOrient)));
+        float x = (float) (stepLen * Math.sin(Math.toRadians(endOrient)));
+        float y = (float) (stepLen * Math.cos(Math.toRadians(endOrient)));
         stepSurfaceView.autoAddPoint(x, -y);
     }
 
@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements StepSensorBase.St
         // 方向回调
         compassView.setOrient(-orient); // 指针转动
         orientText.setText("方向:" + orient);
-        correctOrient = SensorUtil.getInstance().getRotateEndOrient(orient);
+        endOrient = SensorUtil.getInstance().getRotateEndOrient(orient);
     }
 
 

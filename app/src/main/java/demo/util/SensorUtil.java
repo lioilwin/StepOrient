@@ -14,15 +14,14 @@ import java.util.Stack;
 public class SensorUtil {
     private static final String TAG = "SensorUtil";
     private static final SensorUtil sensorUtil = new SensorUtil(); // 单例常量
+    private SensorManager sensorManager;
 
-    public static final int SENSE = 6; // 方向差值灵敏度
-    public static final int STOP_COUNT = 6; // 停止次数
+    private static final int SENSE = 6; // 方向差值灵敏度
+    private static final int STOP_COUNT = 6; // 停止次数
     private int initialOrient = -1; // 初始方向
     private boolean isRotating = false; // 是否正在转动
-
     private int lastDOrient = 0; // 上次方向与初始方向差值
-    private Stack<Integer> dOrientStack = new Stack<>(); // 方向差值缓存栈
-    private SensorManager sensorManager;
+    private Stack<Integer> dOrientStack = new Stack<>(); // 历史方向与初始方向的差值栈
 
     private SensorUtil() {
     }
@@ -57,6 +56,7 @@ public class SensorUtil {
 
     /**
      * 获取手机转动停止的方向
+     *
      * @param orient 手机实时方向
      */
     public int getRotateEndOrient(int orient) {
@@ -64,7 +64,7 @@ public class SensorUtil {
         if (initialOrient == -1) {
             // 初始化转动
             endOrient = initialOrient = orient;
-            Log.i(TAG, "Orient: 初始方向：" + initialOrient);
+            Log.i(TAG, "getRotateEndOrient: 初始化，方向：" + initialOrient);
         }
 
         int currentDOrient = Math.abs(orient - initialOrient); // 当前方向与初始方向差值
@@ -96,11 +96,11 @@ public class SensorUtil {
                     dOrientStack.clear();
                     initialOrient = -1;
                     endOrient = orient;
-                    Log.i(TAG, "Orient: 停止转动------，停止方向：" + endOrient);
+                    Log.i(TAG, "getRotateEndOrient: ------停止转动，方向：" + endOrient);
                 } else {
                     // 正在转动，把当前方向与初始方向差值入栈
                     dOrientStack.push(currentDOrient);
-                    Log.i(TAG, "Orient: 正在转动，当前方向：" + orient);
+                    Log.i(TAG, "getRotateEndOrient: 正在转动，方向：" + orient);
                 }
             } else {
                 lastDOrient = currentDOrient;
