@@ -33,7 +33,6 @@ public class OrientSensor implements SensorEventListener {
 
     /**
      * 注册加速度传感器和地磁场传感器
-     *
      * @return 是否支持方向功能
      */
     public Boolean registerOrient() {
