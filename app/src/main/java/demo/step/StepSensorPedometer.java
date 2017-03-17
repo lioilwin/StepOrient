@@ -24,11 +24,11 @@ public class StepSensorPedometer extends StepSensorBase {
     protected void registerStepListener() {
         Sensor detectorSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_DETECTOR);
         Sensor countSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER);
-        if (sensorManager.registerListener(this, detectorSensor, SensorManager.SENSOR_DELAY_UI)) {
+        if (sensorManager.registerListener(this, detectorSensor, SensorManager.SENSOR_DELAY_GAME)) {
             isAvailable = true;
             sensorMode = 0;
             Log.i(TAG, "计步传感器Detector可用！");
-        } else if (sensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_UI)) {
+        } else if (sensorManager.registerListener(this, countSensor, SensorManager.SENSOR_DELAY_GAME)) {
             isAvailable = true;
             sensorMode = 1;
             Log.i(TAG, "计步传感器Counter可用！");

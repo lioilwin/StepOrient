@@ -9,40 +9,59 @@ import java.util.List;
 import java.util.Stack;
 
 /**
- * Created by 19219 on 2017/3/10.
+ * 传感器工具类
  */
 public class SensorUtil {
     private static final String TAG = "SensorUtil";
-    private static SensorUtil sensorUtil = new SensorUtil();
+    private static final SensorUtil sensorUtil = new SensorUtil(); // 单例常量
 
-    public static final int SENSE = 5; // 灵敏度
+    public static final int SENSE = 10; // 灵敏度
     private int initialOrient = -1; // 初始方向
+    private boolean isRotating = false; // 是否正在转动
+
     private int lastDOrient = 0; // 上次方向与初始方向差值
     private Stack<Integer> dOrientStack = new Stack<>(); // 方向差值缓存栈
-    private boolean isRotating = false; // 是否正在转动
+    private SensorManager sensorManager;
 
     private SensorUtil() {
     }
 
+    /**
+     * 单例获取
+     */
     public static SensorUtil getInstance() {
         return sensorUtil;
     }
 
     /**
+     * 获取传感器管理类的实例
+     *
+     * @param context
+     * @return
+     */
+    public SensorManager getSensorManager(Context context) {
+        if (sensorManager == null) {
+            sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
+        }
+        return sensorManager;
+    }
+
+    /**
      * 打印所有可用传感器
      */
-    public void printAll(Context context) {
+    public void printAllSensor(Context context) {
         SensorManager mSensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
         List<Sensor> sensorList = mSensorManager.getSensorList(Sensor.TYPE_ALL);
         for (Sensor sensor : sensorList) {
-            Log.d(TAG, "AllSensor----: " + sensor.getName());
+            Log.d(TAG, "所有可用传感器----: " + sensor.getName());
         }
     }
 
     /**
      * 获取手机转动结束后的方向
-     * @param orient 原始方向
-     * @return
+     *
+     * @param orient 手机实时方向
+     * @return 返回转动结束后的正确方向
      */
     public int getCorrectOrient(int orient) {
         int correctOrient = 0; // 正确方向
@@ -65,7 +84,7 @@ public class SensorUtil {
             Log.i(TAG, "Orient: 正在转动，当前方向：" + orient);
 
             if (currentDOrient <= lastDOrient) {
-                // 至少三次当前方向反向或不变，认为停止转动
+                // 至少SENSE次出现当前方向反向或不变, 循环判断SENSE次方向差距与当前差距是否都小于SENSE
                 int size = dOrientStack.size();
                 if (size >= SENSE) {
                     for (int i = 0; i < size; i++) {

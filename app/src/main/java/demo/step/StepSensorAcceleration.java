@@ -70,9 +70,8 @@ public class StepSensorAcceleration extends StepSensorBase {
     @Override
     protected void registerStepListener() {
         // 注册加速度传感器
-        isAvailable = sensorManager.registerListener(this,
-                sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
-                SensorManager.SENSOR_DELAY_UI);
+        isAvailable = sensorManager.registerListener(this, sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER),
+                SensorManager.SENSOR_DELAY_GAME);
         if (isAvailable) {
             Log.i(TAG, "加速度传感器可用！");
         } else {
@@ -144,9 +143,9 @@ public class StepSensorAcceleration extends StepSensorBase {
 //            TEMP_STEP++;
 //            Log.v(TAG, "计步中 TEMP_STEP:" + TEMP_STEP);
 //        } else if (CountTimeState == 2) {
-        CURRENT_SETP++;
+        StepSensorBase.CURRENT_SETP++;
 //            if (stepCallBack != null) {
-        stepCallBack.Step(CURRENT_SETP);
+        stepCallBack.Step(StepSensorBase.CURRENT_SETP);
 //            }
 //        }
 
@@ -249,21 +248,21 @@ public class StepSensorAcceleration extends StepSensorBase {
         public void onFinish() {
             // 如果计时器正常结束，则开始计步
             time.cancel();
-            CURRENT_SETP += TEMP_STEP;
+            StepSensorBase.CURRENT_SETP += TEMP_STEP;
             lastStep = -1;
             Log.v(TAG, "计时正常结束");
 
             timer = new Timer(true);
             TimerTask task = new TimerTask() {
                 public void run() {
-                    if (lastStep == CURRENT_SETP) {
+                    if (lastStep == StepSensorBase.CURRENT_SETP) {
                         timer.cancel();
                         CountTimeState = 0;
                         lastStep = -1;
                         TEMP_STEP = 0;
-                        Log.v(TAG, "停止计步：" + CURRENT_SETP);
+                        Log.v(TAG, "停止计步：" + StepSensorBase.CURRENT_SETP);
                     } else {
-                        lastStep = CURRENT_SETP;
+                        lastStep = StepSensorBase.CURRENT_SETP;
                     }
                 }
             };

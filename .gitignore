@@ -6,3 +6,7 @@
 .DS_Store
 /build
 /captures
+.idea/markdown-navigator/
+.idea/vcs.xml
+app/src/androidTest/
+app/src/test/

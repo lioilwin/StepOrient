@@ -40,9 +40,8 @@ public class CompassView extends View {
         // 初始化绘制路径
         path = new Path();
         path.moveTo(0, 0);// 移动到指点点
-        path.lineTo(-20, 60);// 用线条连接到指定点
-        path.lineTo(0, 50);
-        path.lineTo(20, 60);
+        path.lineTo(-10, 60);// 用线条连接到指定点
+        path.lineTo(10, 60);
         path.close();// 关闭路径
     }
 

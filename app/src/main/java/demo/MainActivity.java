@@ -13,19 +13,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.Stack;
-
 import demo.orient.CompassView;
-import demo.orient.OrientCallBack;
 import demo.orient.OrientSensor;
-import demo.step.StepCallBack;
 import demo.step.StepSensorAcceleration;
-import demo.step.StepSensorPedometer;
 import demo.step.StepSensorBase;
 import demo.step.StepSurfaceView;
 import demo.util.SensorUtil;
 
-public class MainActivity extends AppCompatActivity implements StepCallBack, OrientCallBack {
+public class MainActivity extends AppCompatActivity implements StepSensorBase.StepCallBack, OrientSensor.OrientCallBack {
     public static final int REQUEST_IMG = 1;
     private final String TAG = "MainActivity";
 
@@ -39,15 +34,12 @@ public class MainActivity extends AppCompatActivity implements StepCallBack, Ori
     private StepSensorBase stepSensor; // 计步传感器
     private OrientSensor orientSensor; // 方向传感器
 
-    private int orient = 0;
+    private int correctOrient;
 
     @Override
     public void Step(int stepNum) {
         //  计步回调
 //        stepText.setText("步数:" + stepCount++);
-
-        // 获取手机转动结束后的方向
-        int correctOrient = SensorUtil.getInstance().getCorrectOrient(orient);
         stepText.append(correctOrient + ", ");
 
         // 步长和方向角度转为圆点坐标
@@ -61,15 +53,14 @@ public class MainActivity extends AppCompatActivity implements StepCallBack, Ori
         // 方向回调
         compassView.setOrient(-orient); // 指针转动
         orientText.setText("方向:" + orient);
-        this.orient = orient;
-//        correctOrient = SensorUtil.getInstance().getCorrectOrient(orient);
+        correctOrient = SensorUtil.getInstance().getCorrectOrient(orient);
     }
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        SensorUtil.getInstance().printAll(this); // 打印所有可用传感器
+        SensorUtil.getInstance().printAllSensor(this); // 打印所有可用传感器
 
         setContentView(R.layout.activity_main);
         stepText = (TextView) findViewById(R.id.step_text);
@@ -79,10 +70,13 @@ public class MainActivity extends AppCompatActivity implements StepCallBack, Ori
         imageView = (ImageView) findViewById(R.id.image_view);
 
         // 开启计步监听
-        stepSensor = new StepSensorPedometer(this, this);
-        if (!stepSensor.registerStep()) {
-            Toast.makeText(this, "加速度传感器不可用！", Toast.LENGTH_SHORT).show();
-        }
+//        stepSensor = new StepSensorPedometer(this, this);
+//        if (!stepSensor.registerStep()) {
+            stepSensor = new StepSensorAcceleration(this, this);
+            if (!stepSensor.registerStep()) {
+                Toast.makeText(this, "加速度传感器不可用！", Toast.LENGTH_SHORT).show();
+            }
+//        }
 
 
         // 开启方向监听
