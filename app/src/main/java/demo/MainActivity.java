@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity implements StepSensorBase.St
         compassView = (CompassView) findViewById(R.id.compass_view);
         imageView = (ImageView) findViewById(R.id.image_view);
 
-        // 开启计步监听
+        // 注册计步监听
 //        stepSensor = new StepSensorPedometer(this, this);
 //        if (!stepSensor.registerStep()) {
             stepSensor = new StepSensorAcceleration(this, this);
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements StepSensorBase.St
 //        }
 
 
-        // 开启方向监听
+        // 注册方向监听
         orientSensor = new OrientSensor(this, this);
         if (!orientSensor.registerOrient()) {
             Toast.makeText(this, "方向功能不可用！", Toast.LENGTH_SHORT).show();
