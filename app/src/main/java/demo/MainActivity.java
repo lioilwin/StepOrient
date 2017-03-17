@@ -53,6 +53,7 @@ public class MainActivity extends AppCompatActivity implements StepSensorBase.St
         // 方向回调
         compassView.setOrient(-orient); // 指针转动
         orientText.setText("方向:" + orient);
+		// 获取手机转动停止后的方向
         endOrient = SensorUtil.getInstance().getRotateEndOrient(orient);
     }
 
