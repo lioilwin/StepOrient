@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements StepSensorBase.St
         // 方向回调
         compassView.setOrient(-orient); // 指针转动
         orientText.setText("方向:" + orient);
-        correctOrient = SensorUtil.getInstance().getCorrectOrient(orient);
+        correctOrient = SensorUtil.getInstance().getRotateEndOrient(orient);
     }
 
 
@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity implements StepSensorBase.St
 //        if (!stepSensor.registerStep()) {
             stepSensor = new StepSensorAcceleration(this, this);
             if (!stepSensor.registerStep()) {
-                Toast.makeText(this, "加速度传感器不可用！", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "计步功能不可用！", Toast.LENGTH_SHORT).show();
             }
 //        }
 
@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity implements StepSensorBase.St
         // 开启方向监听
         orientSensor = new OrientSensor(this, this);
         if (!orientSensor.registerOrient()) {
-            Toast.makeText(this, "方向传感器不可用！", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, "方向功能不可用！", Toast.LENGTH_SHORT).show();
         }
     }
 

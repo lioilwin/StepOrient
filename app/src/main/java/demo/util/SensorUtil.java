@@ -15,7 +15,8 @@ public class SensorUtil {
     private static final String TAG = "SensorUtil";
     private static final SensorUtil sensorUtil = new SensorUtil(); // 单例常量
 
-    public static final int SENSE = 10; // 灵敏度
+    public static final int SENSE = 6; // 方向差值灵敏度
+    public static final int STOP_COUNT = 6; // 停止次数
     private int initialOrient = -1; // 初始方向
     private boolean isRotating = false; // 是否正在转动
 
@@ -35,9 +36,6 @@ public class SensorUtil {
 
     /**
      * 获取传感器管理类的实例
-     *
-     * @param context
-     * @return
      */
     public SensorManager getSensorManager(Context context) {
         if (sensorManager == null) {
@@ -58,17 +56,15 @@ public class SensorUtil {
     }
 
     /**
-     * 获取手机转动结束后的方向
-     *
+     * 获取手机转动停止的方向
      * @param orient 手机实时方向
-     * @return 返回转动结束后的正确方向
      */
-    public int getCorrectOrient(int orient) {
-        int correctOrient = 0; // 正确方向
+    public int getRotateEndOrient(int orient) {
+        int endOrient = 0; // 转动停止方向
         if (initialOrient == -1) {
             // 初始化转动
-            initialOrient = correctOrient = orient;
-            Log.i(TAG, "Orient: 初始化方向：" + correctOrient);
+            endOrient = initialOrient = orient;
+            Log.i(TAG, "Orient: 初始方向：" + initialOrient);
         }
 
         int currentDOrient = Math.abs(orient - initialOrient); // 当前方向与初始方向差值
@@ -81,12 +77,11 @@ public class SensorUtil {
             }
         } else {
             // 检测是否停止转动
-            Log.i(TAG, "Orient: 正在转动，当前方向：" + orient);
-
             if (currentDOrient <= lastDOrient) {
-                // 至少SENSE次出现当前方向反向或不变, 循环判断SENSE次方向差距与当前差距是否都小于SENSE
+                // 至少累计STOP_COUNT次出现当前方向差小于上次方向差
                 int size = dOrientStack.size();
-                if (size >= SENSE) {
+                if (size >= STOP_COUNT) {
+                    // 只有以前SENSE次方向差距与当前差距的差值都小于等于SENSE，才判断为停止
                     for (int i = 0; i < size; i++) {
                         if (Math.abs(currentDOrient - dOrientStack.pop()) >= SENSE) {
                             isRotating = true;
@@ -97,18 +92,20 @@ public class SensorUtil {
                 }
 
                 if (!isRotating) {
+                    // 停止转动
                     dOrientStack.clear();
                     initialOrient = -1;
-                    correctOrient = orient;
-                    Log.i(TAG, "Orient: 停止转动------，正确方向：" + correctOrient);
+                    endOrient = orient;
+                    Log.i(TAG, "Orient: 停止转动------，停止方向：" + endOrient);
                 } else {
+                    // 正在转动，把当前方向与初始方向差值入栈
                     dOrientStack.push(currentDOrient);
+                    Log.i(TAG, "Orient: 正在转动，当前方向：" + orient);
                 }
-
             } else {
                 lastDOrient = currentDOrient;
             }
         }
-        return correctOrient;
+        return endOrient;
     }
 }
