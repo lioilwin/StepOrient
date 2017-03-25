@@ -8,7 +8,7 @@ android {
         targetSdkVersion 25
         versionCode 1
         versionName '1'
-        applicationId 'com.demo'
+        applicationId 'life.demo'
     }
     buildTypes {
         release {

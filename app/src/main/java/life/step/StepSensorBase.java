@@ -1,10 +1,10 @@
-package demo.step;
+package life.step;
 
 import android.content.Context;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 
-import demo.util.SensorUtil;
+import life.util.SensorUtil;
 
 /**
  * 计步传感器抽象类，子类分为加速度传感器、或计步传感器

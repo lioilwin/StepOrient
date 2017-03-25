@@ -30,10 +30,10 @@ public class MainActivity extends AppCompatActivity
 	}
 
 	@Override
-	public void Orient(int orient) {
+	public void Orient(int mOrient) {
 		// 方向回调
 		// 获取转动停止后的方向
-		endOrient = SensorUtil.getInstance().getRotateEndOrient(orient);
+		endOrient = SensorUtil.getInstance().getRotateEndOrient(mOrient);
 	}
 
 

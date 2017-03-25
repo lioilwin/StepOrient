@@ -1,4 +1,4 @@
-package demo.orient;
+package life.orient;
 
 import android.content.Context;
 import android.hardware.Sensor;

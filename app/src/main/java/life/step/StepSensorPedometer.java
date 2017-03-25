@@ -1,4 +1,4 @@
-package demo.step;
+package life.step;
 
 import android.content.Context;
 import android.hardware.Sensor;
