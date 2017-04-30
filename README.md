@@ -1,5 +1,7 @@
 # 利用Android计步和方向传感传感器组合使用,可以在地图上记录人行走的轨迹图
 
+![](计步截图.jpg)
+
 ## step包(计步功能):
 	StepSensorBase.java 计步传感器抽象类，计步公用方法和变量
 	StepSensorAcceleration.java 加速度传感器实现计步功能
