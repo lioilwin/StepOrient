@@ -1,5 +1,10 @@
-# 利用Android计步和方向传感传感器组合使用,可以在地图上记录人行走的轨迹图
+	 注：我将很多AS项目配置都删了，导入项目后有可能gradle插件版本与Android studio不匹配， 
+	 记得在build.gradle修改gradle插件版本，与Android studio版本匹配 
+	 dependencies {
+		classpath 'com.android.tools.build:gradle:2.3.1'
+	 }
 
+# 利用Android计步和方向传感传感器组合使用,可以在地图上记录人行走的轨迹图
 ![](计步截图.jpg)
 
 ## step包(计步功能):
