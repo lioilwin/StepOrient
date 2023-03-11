@@ -14,8 +14,8 @@ import android.util.Log;
 public class OrientSensor implements SensorEventListener {
     private static final String TAG = "OrientSensor";
     private SensorManager sensorManager;
-    private final OrientCallBack orientCallBack;
-    private final Context context;
+    private OrientCallBack orientCallBack;
+    private Context context;
     float[] accelerometerValues = new float[3];
     float[] magneticValues = new float[3];
 
@@ -36,7 +36,7 @@ public class OrientSensor implements SensorEventListener {
      * @return 是否支持方向功能
      */
     public Boolean registerOrient() {
-        boolean isAvailable = true;
+        Boolean isAvailable = true;
         sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
 
         // 注册加速度传感器

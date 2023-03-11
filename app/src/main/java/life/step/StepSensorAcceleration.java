@@ -143,9 +143,9 @@ public class StepSensorAcceleration extends StepSensorBase {
 //            TEMP_STEP++;
 //            Log.v(TAG, "计步中 TEMP_STEP:" + TEMP_STEP);
 //        } else if (CountTimeState == 2) {
-        StepSensorBase.CURRENT_STEP++;
+        StepSensorBase.CURRENT_SETP++;
 //            if (stepCallBack != null) {
-        stepCallBack.Step(StepSensorBase.CURRENT_STEP);
+        stepCallBack.Step(StepSensorBase.CURRENT_SETP);
 //            }
 //        }
 
@@ -200,7 +200,9 @@ public class StepSensorAcceleration extends StepSensorBase {
             tempCount++;
         } else {
             tempThread = averageValue(tempValue, valueNum);
-            System.arraycopy(tempValue, 1, tempValue, 0, valueNum - 1);
+            for (int i = 1; i < valueNum; i++) {
+                tempValue[i - 1] = tempValue[i];
+            }
             tempValue[valueNum - 1] = value;
         }
         return tempThread;
@@ -212,7 +214,7 @@ public class StepSensorAcceleration extends StepSensorBase {
      * 1.计算数组的均值
      * 2.通过均值将阈值梯度化在一个范围里
      * */
-    public float averageValue(float[] value, int n) {
+    public float averageValue(float value[], int n) {
         float ave = 0;
         for (int i = 0; i < n; i++) {
             ave += value[i];
@@ -221,13 +223,13 @@ public class StepSensorAcceleration extends StepSensorBase {
         if (ave >= 8) {
 //            Log.v(TAG, "超过8");
             ave = (float) 4.3;
-        } else if (ave >= 7) {
+        } else if (ave >= 7 && ave < 8) {
 //            Log.v(TAG, "7-8");
             ave = (float) 3.3;
-        } else if (ave >= 4) {
+        } else if (ave >= 4 && ave < 7) {
 //            Log.v(TAG, "4-7");
             ave = (float) 2.3;
-        } else if (ave >= 3) {
+        } else if (ave >= 3 && ave < 4) {
 //            Log.v(TAG, "3-4");
             ave = (float) 2.0;
         } else {
@@ -246,21 +248,21 @@ public class StepSensorAcceleration extends StepSensorBase {
         public void onFinish() {
             // 如果计时器正常结束，则开始计步
             time.cancel();
-            StepSensorBase.CURRENT_STEP += TEMP_STEP;
+            StepSensorBase.CURRENT_SETP += TEMP_STEP;
             lastStep = -1;
             Log.v(TAG, "计时正常结束");
 
             timer = new Timer(true);
             TimerTask task = new TimerTask() {
                 public void run() {
-                    if (lastStep == StepSensorBase.CURRENT_STEP) {
+                    if (lastStep == StepSensorBase.CURRENT_SETP) {
                         timer.cancel();
                         CountTimeState = 0;
                         lastStep = -1;
                         TEMP_STEP = 0;
-                        Log.v(TAG, "停止计步：" + StepSensorBase.CURRENT_STEP);
+                        Log.v(TAG, "停止计步：" + StepSensorBase.CURRENT_SETP);
                     } else {
-                        lastStep = StepSensorBase.CURRENT_STEP;
+                        lastStep = StepSensorBase.CURRENT_SETP;
                     }
                 }
             };

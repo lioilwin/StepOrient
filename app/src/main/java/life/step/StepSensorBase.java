@@ -10,10 +10,10 @@ import life.util.SensorUtil;
  * 计步传感器抽象类，子类分为加速度传感器、或计步传感器
  */
 public abstract class StepSensorBase implements SensorEventListener {
-    private final Context context;
+    private Context context;
     protected StepCallBack stepCallBack;
     protected SensorManager sensorManager;
-    protected static int CURRENT_STEP = 0;
+    protected static int CURRENT_SETP = 0;
     protected boolean isAvailable = false;
 
     public StepSensorBase(Context context, StepCallBack stepCallBack) {
