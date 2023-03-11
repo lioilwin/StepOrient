@@ -48,12 +48,12 @@ public class StepSensorPedometer extends StepSensorBase {
         liveStep = (int) event.values[0];
         if (sensorMode == 0) {
             Log.i(TAG, "Detector步数："+liveStep);
-            StepSensorBase.CURRENT_SETP += liveStep;
+            StepSensorBase.CURRENT_STEP += liveStep;
         } else if (sensorMode == 1) {
             Log.i(TAG, "Counter步数："+liveStep);
-            StepSensorBase.CURRENT_SETP = liveStep;
+            StepSensorBase.CURRENT_STEP = liveStep;
         }
-        stepCallBack.Step(StepSensorBase.CURRENT_SETP);
+        stepCallBack.Step(StepSensorBase.CURRENT_STEP);
     }
 
     @Override
